@@ -204,3 +204,797 @@ html, body {
 }
 .check-icon.ok { background: rgba(109,184,64,0.15); border-color: var(--accent); }
 .check-icon.soon { background: rgba(208,156,56,0.1); border-color: var(--amber); }
+.check-icon.fail { background: rgba(216,80,80,0.1); border-color: var(--danger); }
+.check-body { flex: 1; min-width: 0; }
+.check-label {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.25rem;
+}
+.check-value {
+  font-size: 12px; color: var(--text); line-height: 1.5;
+  word-break: break-word;
+}
+.check-value.ok { color: var(--accent); }
+.check-value.soon { color: var(--amber); }
+.check-value.fail { color: var(--danger); }
+.check-status {
+  display: flex; align-items: center; gap: 0.4rem;
+  margin-left: auto; flex-shrink: 0;
+}
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.verify-footer {
+  padding: 1.25rem 1.5rem 2rem;
+  border-top: 1px solid var(--border);
+}
+.btn-results {
+  width: 100%; background: var(--accent); color: #050f05;
+  border: none; border-radius: 8px;
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 0.85rem; cursor: pointer;
+  display: none;
+  transition: opacity 0.15s;
+}
+.btn-results.visible { display: block; }
+.btn-results:active { opacity: 0.85; }
+
+/* ── RESULT SCREEN ── */
+#screen-result { overflow-y: auto; padding-bottom: 2rem; }
+
+.result-header {
+  padding: 2.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.result-common {
+  font-family: var(--serif); font-size: 1.8rem; font-weight: 500;
+  line-height: 1.2; margin-bottom: 0.3rem;
+}
+.result-scientific {
+  font-family: var(--serif); font-style: italic;
+  font-size: 0.9rem; color: var(--muted);
+}
+
+.result-score-block {
+  margin: 1.25rem 1.5rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem;
+}
+.score-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.score-label {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+}
+.score-number {
+  font-size: 2rem; font-weight: 700; line-height: 1;
+}
+.score-bar-track {
+  height: 4px; background: var(--border2);
+  border-radius: 2px; margin-bottom: 1.25rem; overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%; border-radius: 2px; background: var(--accent);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0;
+}
+.score-rows { display: flex; flex-direction: column; gap: 0.6rem; }
+.score-row {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 11px;
+}
+.score-row-label { flex: 1; color: var(--muted); }
+.score-row-bar {
+  width: 80px; height: 3px;
+  background: var(--border2); border-radius: 2px; overflow: hidden;
+}
+.score-row-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0;
+}
+.score-row-pts { color: var(--text); min-width: 36px; text-align: right; }
+.score-row-pts.soon { color: var(--muted); font-size: 10px; }
+
+.verdict-badge {
+  margin: 0 1.5rem 1.25rem;
+  border-radius: 8px; padding: 0.9rem 1.2rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+}
+.verdict-badge.accepted {
+  background: rgba(109,184,64,0.12); border: 1px solid rgba(109,184,64,0.35);
+  color: var(--accent);
+}
+.verdict-badge.flagged {
+  background: rgba(208,156,56,0.12); border: 1px solid rgba(208,156,56,0.35);
+  color: var(--amber);
+}
+.verdict-badge.rejected {
+  background: rgba(216,80,80,0.12); border: 1px solid rgba(216,80,80,0.35);
+  color: var(--danger);
+}
+.verdict-icon { font-size: 1.3rem; }
+
+.result-section-label {
+  padding: 0 1.5rem; margin-bottom: 0.6rem;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+}
+.result-field-marks {
+  margin: 0 1.5rem 1.25rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+}
+.field-mark-tag {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 4px; padding: 0.3rem 0.6rem;
+  font-size: 11px; color: var(--text);
+}
+
+.result-description {
+  margin: 0 1.5rem 1.25rem;
+  font-size: 12px; color: var(--muted); line-height: 1.7;
+}
+
+.result-map-wrap {
+  margin: 0 1.5rem 0.5rem;
+  border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; height: 240px; position: relative;
+}
+#map { width: 100%; height: 100%; }
+.map-attribution-bar {
+  padding: 0.4rem 1.5rem;
+  font-size: 9px; color: var(--muted);
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.map-attribution-bar a { color: var(--accent); text-decoration: none; }
+
+.ebird-count {
+  margin: 0 1.5rem 1.5rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.8rem 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ebird-count-label { font-size: 11px; color: var(--muted); }
+.ebird-count-num { font-size: 1.1rem; font-weight: 700; color: var(--teal); }
+.ebird-count-sub { font-size: 9px; color: var(--muted); }
+
+.btn-new {
+  margin: 0.5rem 1.5rem 0;
+  display: block; width: calc(100% - 3rem);
+  background: transparent;
+  border: 1px solid var(--border2); border-radius: 8px;
+  color: var(--text); font-family: var(--mono); font-size: 12px;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 0.85rem; cursor: pointer; text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btn-new:active { background: var(--surface); }
+
+/* ── ANIMATIONS ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── LEAFLET DARK OVERRIDE ── */
+.leaflet-container { background: var(--bg) !important; }
+.leaflet-popup-content-wrapper {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  box-shadow: none !important;
+}
+.leaflet-popup-tip { background: var(--surface) !important; }
+
+/* ── ERROR TOAST ── */
+.toast {
+  position: fixed; bottom: 1.5rem; left: 1rem; right: 1rem; z-index: 9999;
+  background: var(--danger); color: white;
+  border-radius: 8px; padding: 0.75rem 1rem;
+  font-size: 12px; line-height: 1.5;
+  transform: translateY(120px); transition: transform 0.3s;
+  max-width: 420px; margin: 0 auto;
+}
+.toast.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="screen-setup" class="screen active">
+  <div class="setup-logo">FieldLens</div>
+  <div class="setup-sub">Bird ID Research Demo</div>
+
+  <div class="setup-card">
+    <div>
+      <div class="setup-label">Gemini API Key</div>
+      <input class="setup-input" id="input-gemini" type="password" placeholder="AIza...">
+    </div>
+    <div class="setup-divider"></div>
+    <div>
+      <div class="setup-label">eBird API Key</div>
+      <input class="setup-input" id="input-ebird" type="password" placeholder="Your eBird key">
+    </div>
+    <div class="setup-hint">
+      Keys are used locally in your browser only — never stored or transmitted anywhere except the respective APIs.
+      Get a free Gemini key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> and an eBird key at <a href="https://ebird.org/api/keygen" target="_blank">ebird.org/api/keygen</a>.
+    </div>
+  </div>
+
+  <button class="btn-start" onclick="startApp()">Launch Camera →</button>
+  <div class="version-tag">FIELDLENS v0.1 · RESEARCH BUILD</div>
+</div>
+
+<div id="screen-camera" class="screen">
+  <div class="cam-topbar">
+    <div class="cam-gps">
+      <div class="gps-dot acquiring" id="gps-dot"></div>
+      <span class="gps-text" id="gps-text">Acquiring GPS...</span>
+    </div>
+    <div class="cam-settings-btn" onclick="showScreen('screen-setup')">⚙</div>
+  </div>
+
+  <video id="video" autoplay playsinline muted></video>
+  <canvas id="canvas"></canvas>
+
+  <div class="cam-instructions">Point at a bird and tap to capture</div>
+  <div class="cam-bottombar">
+    <div class="capture-btn" onclick="captureAndAnalyse()" id="capture-btn">
+      <div class="capture-btn-inner"></div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-verify" class="screen">
+  <div class="verify-header">
+    <div class="verify-title">Verifying submission</div>
+    <div class="verify-sub">Anti-cheat pipeline running</div>
+  </div>
+
+  <div class="verify-photo-strip">
+    <img id="verify-thumb" src="" alt="captured photo">
+    <div class="verify-photo-overlay"></div>
+  </div>
+
+  <div class="verify-checks" id="verify-checks">
+    </div>
+
+  <div class="verify-footer">
+    <button class="btn-results" id="btn-results" onclick="showResult()">View Results →</button>
+  </div>
+</div>
+
+<div id="screen-result" class="screen">
+  <div class="result-header">
+    <div class="result-common" id="result-common">—</div>
+    <div class="result-scientific" id="result-scientific">—</div>
+  </div>
+
+  <div class="result-score-block">
+    <div class="score-top">
+      <div class="score-label">Trust Score</div>
+      <div class="score-number" id="score-number">0<span style="font-size:1rem;color:var(--muted)">/100</span></div>
+    </div>
+    <div class="score-bar-track"><div class="score-bar-fill" id="score-bar"></div></div>
+    <div class="score-rows">
+      <div class="score-row">
+        <span class="score-row-label">📍 GPS Signal</span>
+        <div class="score-row-bar"><div class="score-row-fill" id="bar-gps" style="background:var(--accent)"></div></div>
+        <span class="score-row-pts" id="pts-gps">0/25</span>
+      </div>
+      <div class="score-row">
+        <span class="score-row-label">🤖 AI Confidence</span>
+        <div class="score-row-bar"><div class="score-row-fill" id="bar-ai" style="background:var(--teal)"></div></div>
+        <span class="score-row-pts" id="pts-ai">0/40</span>
+      </div>
+      <div class="score-row">
+        <span class="score-row-label">🗺 eBird Validation</span>
+        <div class="score-row-bar"><div class="score-row-fill" id="bar-ebird" style="background:var(--teal)"></div></div>
+        <span class="score-row-pts" id="pts-ebird">0/35</span>
+      </div>
+      <div class="score-row" style="opacity:0.45">
+        <span class="score-row-label">📷 EXIF Metadata</span>
+        <div class="score-row-bar"></div>
+        <span class="score-row-pts soon">v2 →</span>
+      </div>
+      <div class="score-row" style="opacity:0.45">
+        <span class="score-row-label">🖥 Moiré Detection</span>
+        <div class="score-row-bar"></div>
+        <span class="score-row-pts soon">v2 →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict-badge" id="verdict-badge">
+    <span class="verdict-icon" id="verdict-icon"></span>
+    <span id="verdict-text"></span>
+  </div>
+
+  <div class="result-section-label" style="margin-top:0.5rem">Field Marks</div>
+  <div class="result-field-marks" id="result-field-marks"></div>
+
+  <div class="result-section-label">Notes</div>
+  <div class="result-description" id="result-description"></div>
+
+  <div class="result-section-label" style="margin-top:1.25rem">
+    Sightings Map — <span id="ebird-radius">50km radius</span>
+  </div>
+  <div class="result-map-wrap">
+    <div id="map"></div>
+  </div>
+  <div class="map-attribution-bar">
+    Data: <a href="https://ebird.org" target="_blank">eBird.org</a> · Cornell Lab of Ornithology
+  </div>
+
+  <div class="ebird-count">
+    <div>
+      <div class="ebird-count-label">Recent sightings near you</div>
+      <div class="ebird-count-sub">last 14 days · 50km radius</div>
+    </div>
+    <div>
+      <div class="ebird-count-num" id="ebird-count-num">—</div>
+    </div>
+  </div>
+
+  <button class="btn-new" onclick="newSubmission()">← New Submission</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────────
+const S = {
+  geminiKey: '',
+  eBirdKey: '',
+  gps: null,          // { lat, lng, city }
+  photoB64: null,     // base64 JPEG (no prefix)
+  photoURL: null,     // object URL for display
+  identification: null, // Gemini parsed JSON
+  eBirdSightings: [],
+  trustScore: { gps: 0, ai: 0, ebird: 0, total: 0 },
+  map: null,
+  videoStream: null
+};
+
+// ── NAVIGATION ──────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── TOAST ───────────────────────────────────────────────
+function toast(msg, dur = 4000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ── SETUP ───────────────────────────────────────────────
+function startApp() {
+  const gk = document.getElementById('input-gemini').value.trim();
+  const ek = document.getElementById('input-ebird').value.trim();
+  if (!gk) return toast('Please enter your Gemini API key.');
+  if (!ek) return toast('Please enter your eBird API key.');
+  S.geminiKey = gk;
+  S.eBirdKey = ek;
+  initCamera();
+}
+
+// ── CAMERA ──────────────────────────────────────────────
+async function initCamera() {
+  showScreen('screen-camera');
+  startGPS();
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    S.videoStream = stream;
+    document.getElementById('video').srcObject = stream;
+  } catch (err) {
+    toast('Camera access denied. Please allow camera permission and reload.');
+    console.error(err);
+  }
+}
+
+// ── GPS ─────────────────────────────────────────────────
+function startGPS() {
+  const dot = document.getElementById('gps-dot');
+  const txt = document.getElementById('gps-text');
+  dot.className = 'gps-dot acquiring';
+  txt.textContent = 'Acquiring GPS...';
+
+  if (!navigator.geolocation) {
+    dot.className = 'gps-dot error';
+    txt.textContent = 'GPS unavailable';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      S.gps = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      dot.className = 'gps-dot ready';
+      const latStr = S.gps.lat.toFixed(4) + '°' + (S.gps.lat >= 0 ? 'N' : 'S');
+      const lngStr = Math.abs(S.gps.lng).toFixed(4) + '°' + (S.gps.lng >= 0 ? 'E' : 'W');
+      txt.textContent = latStr + '  ' + lngStr;
+    },
+    err => {
+      dot.className = 'gps-dot error';
+      txt.textContent = 'GPS denied';
+      S.gps = null;
+    },
+    { enableHighAccuracy: true, timeout: 15000 }
+  );
+}
+
+// ── CAPTURE ─────────────────────────────────────────────
+function captureAndAnalyse() {
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  if (!video.readyState) return toast('Camera not ready yet.');
+
+  // Draw frame to canvas (resize to max 900px)
+  const vw = video.videoWidth, vh = video.videoHeight;
+  const scale = Math.min(900 / vw, 900 / vh, 1);
+  canvas.width = Math.round(vw * scale);
+  canvas.height = Math.round(vh * scale);
+  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Save base64 without prefix
+  const dataURL = canvas.toDataURL('image/jpeg', 0.85);
+  S.photoB64 = dataURL.split(',')[1];
+  S.photoURL = dataURL;
+
+  // Stop camera
+  if (S.videoStream) S.videoStream.getTracks().forEach(t => t.stop());
+
+  runVerification();
+}
+
+// ── VERIFICATION PIPELINE ───────────────────────────────
+const CHECKS = [
+  { id: 'gps',   icon: '📍', label: 'GPS Signal' },
+  { id: 'photo', icon: '📸', label: 'Photo Captured' },
+  { id: 'ai',    icon: '🤖', label: 'AI Species ID' },
+  { id: 'ebird', icon: '🗺', label: 'eBird Habitat Check' },
+  { id: 'exif',  icon: '📷', label: 'EXIF Metadata Analysis', future: true },
+  { id: 'moire', icon: '🖥', label: 'Moiré Artifact Detection', future: true },
+];
+
+function buildChecks() {
+  const container = document.getElementById('verify-checks');
+  container.innerHTML = '';
+  CHECKS.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'check-item';
+    el.id = 'check-' + c.id;
+    el.innerHTML = `
+      <div class="check-icon" id="icon-${c.id}">${c.icon}</div>
+      <div class="check-body">
+        <div class="check-label">${c.label}</div>
+        <div class="check-value" id="val-${c.id}">—</div>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function revealCheck(id) {
+  const el = document.getElementById('check-' + id);
+  if (el) el.classList.add('visible');
+}
+
+function setCheck(id, value, status, iconClass) {
+  const val = document.getElementById('val-' + id);
+  const icon = document.getElementById('icon-' + id);
+  if (val) { val.textContent = value; val.className = 'check-value ' + (status || ''); }
+  if (icon && iconClass) icon.className = 'check-icon ' + iconClass;
+}
+
+function setCheckSpinner(id) {
+  const val = document.getElementById('val-' + id);
+  if (val) val.innerHTML = '<div class="spinner"></div>';
+}
+
+async function runVerification() {
+  buildChecks();
+  document.getElementById('verify-thumb').src = S.photoURL;
+  showScreen('screen-verify');
+
+  // 1. GPS
+  await delay(200);
+  revealCheck('gps');
+  await delay(400);
+  if (S.gps) {
+    setCheck('gps',
+      `${S.gps.lat.toFixed(5)}°, ${S.gps.lng.toFixed(5)}°`,
+      'ok', 'ok');
+    S.trustScore.gps = 25;
+  } else {
+    setCheck('gps', 'No GPS signal — 0 pts', 'fail', 'fail');
+    S.trustScore.gps = 0;
+  }
+
+  // 2. Photo
+  await delay(300);
+  revealCheck('photo');
+  await delay(300);
+  setCheck('photo', 'Frame captured successfully', 'ok', 'ok');
+
+  // 3. Gemini AI
+  await delay(400);
+  revealCheck('ai');
+  setCheckSpinner('ai');
+  try {
+    S.identification = await callGemini();
+    if (S.identification.cannotDetermine) {
+      setCheck('ai', 'Could not identify a bird in this photo', 'fail', 'fail');
+      S.trustScore.ai = 0;
+    } else {
+      const pct = Math.round((S.identification.confidence || 0.5) * 100);
+      setCheck('ai',
+        `${S.identification.commonName} · ${pct}% confidence`,
+        'ok', 'ok');
+      S.trustScore.ai = Math.round((S.identification.confidence || 0.5) * 40);
+    }
+  } catch (err) {
+    setCheck('ai', 'Gemini API error: ' + err.message, 'fail', 'fail');
+    S.trustScore.ai = 0;
+  }
+
+  // 4. eBird
+  await delay(300);
+  revealCheck('ebird');
+  setCheckSpinner('ebird');
+  if (S.identification && !S.identification.cannotDetermine && S.gps) {
+    try {
+      S.eBirdSightings = await callEBird(S.identification.eBirdCode, S.gps.lat, S.gps.lng);
+      const n = S.eBirdSightings.length;
+      const pts = Math.round(Math.min(n, 20) / 20 * 35);
+      S.trustScore.ebird = pts;
+      setCheck('ebird',
+        `${n} recent sighting${n !== 1 ? 's' : ''} within 50km`,
+        n > 0 ? 'ok' : 'fail', n > 0 ? 'ok' : 'fail');
+    } catch (err) {
+      setCheck('ebird', 'eBird check failed: ' + err.message, 'fail', 'fail');
+      S.trustScore.ebird = 0;
+    }
+  } else if (!S.gps) {
+    setCheck('ebird', 'Skipped — no GPS available', 'fail', 'fail');
+    S.trustScore.ebird = 0;
+  } else {
+    setCheck('ebird', 'Skipped — species not identified', 'fail', 'fail');
+    S.trustScore.ebird = 0;
+  }
+
+  // 5. EXIF (future)
+  await delay(400);
+  revealCheck('exif');
+  await delay(350);
+  setCheck('exif', 'Planned for v2 — will verify camera sensor metadata', 'soon', 'soon');
+
+  // 6. Moiré (future)
+  await delay(300);
+  revealCheck('moire');
+  await delay(350);
+  setCheck('moire', 'Planned for v2 — will detect screen re-photograph artifacts', 'soon', 'soon');
+
+  // Done
+  S.trustScore.total = S.trustScore.gps + S.trustScore.ai + S.trustScore.ebird;
+  await delay(600);
+  const btn = document.getElementById('btn-results');
+  btn.classList.add('visible');
+}
+
+// ── GEMINI API ───────────────────────────────────────────
+async function callGemini() {
+  const prompt = `You are an expert ornithologist. Identify the bird in this photo.
+
+Respond ONLY with valid JSON, no other text, no markdown fences:
+{
+  "commonName": "American Robin",
+  "scientificName": "Turdus migratorius",
+  "eBirdCode": "amerob",
+  "confidence": 0.92,
+  "description": "One sentence about the bird.",
+  "fieldMarks": ["orange-red breast", "dark head", "yellow bill"],
+  "cannotDetermine": false
+}
+
+If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCode must be the official eBird species code (e.g. amerob, norcar, blujay, mallar3).`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${S.geminiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: 'image/jpeg', data: S.photoB64 } },
+            { text: prompt }
+          ]
+        }],
+        generationConfig: { 
+          maxOutputTokens: 512, 
+          temperature: 0.1,
+          responseMimeType: "application/json" // This forces Gemini to output clean JSON
+        }
+      })
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `HTTP ${res.status}`);
+  }
+
+  const data = await res.json();
+  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  const clean = raw.replace(/```json|```/g, '').trim();
+  return JSON.parse(clean);
+}
+
+// ── EBIRD API ────────────────────────────────────────────
+async function callEBird(speciesCode, lat, lng) {
+  if (!speciesCode) throw new Error('No species code');
+  const url = `https://api.ebird.org/v2/data/obs/geo/recent/${encodeURIComponent(speciesCode)}` +
+    `?lat=${lat}&lng=${lng}&dist=50&back=14&maxResults=100`;
+
+  const res = await fetch(url, {
+    headers: { 'x-ebirdapitoken': S.eBirdKey }
+  });
+
+  if (!res.ok) throw new Error(`eBird HTTP ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+// ── RESULT SCREEN ────────────────────────────────────────
+function showResult() {
+  showScreen('screen-result');
+  const id = S.identification;
+
+  // Species name
+  document.getElementById('result-common').textContent =
+    id && !id.cannotDetermine ? id.commonName : 'Unidentified Bird';
+  document.getElementById('result-scientific').textContent =
+    id && id.scientificName ? id.scientificName : '—';
+
+  // Field marks
+  const fm = document.getElementById('result-field-marks');
+  fm.innerHTML = '';
+  if (id && id.fieldMarks) {
+    id.fieldMarks.forEach(m => {
+      const tag = document.createElement('div');
+      tag.className = 'field-mark-tag';
+      tag.textContent = m;
+      fm.appendChild(tag);
+    });
+  }
+
+  // Description
+  document.getElementById('result-description').textContent =
+    id?.description || '—';
+
+  // Trust score animation
+  const t = S.trustScore;
+  setTimeout(() => {
+    document.getElementById('score-number').innerHTML =
+      t.total + '<span style="font-size:1rem;color:var(--muted)">/100</span>';
+    document.getElementById('score-bar').style.width = t.total + '%';
+    document.getElementById('bar-gps').style.width = (t.gps / 25 * 100) + '%';
+    document.getElementById('pts-gps').textContent = t.gps + '/25';
+    document.getElementById('bar-ai').style.width = (t.ai / 40 * 100) + '%';
+    document.getElementById('pts-ai').textContent = t.ai + '/40';
+    document.getElementById('bar-ebird').style.width = (t.ebird / 35 * 100) + '%';
+    document.getElementById('pts-ebird').textContent = t.ebird + '/35';
+  }, 200);
+
+  // Score bar color
+  const bar = document.getElementById('score-bar');
+  if (t.total >= 75) bar.style.background = 'var(--accent)';
+  else if (t.total >= 50) bar.style.background = 'var(--amber)';
+  else bar.style.background = 'var(--danger)';
+
+  // Verdict
+  const vb = document.getElementById('verdict-badge');
+  const vi = document.getElementById('verdict-icon');
+  const vt = document.getElementById('verdict-text');
+  if (t.total >= 75) {
+    vb.className = 'verdict-badge accepted';
+    vi.textContent = '✓'; vt.textContent = 'Submission Accepted';
+  } else if (t.total >= 50) {
+    vb.className = 'verdict-badge flagged';
+    vi.textContent = '⚠'; vt.textContent = 'Flagged for Review';
+  } else {
+    vb.className = 'verdict-badge rejected';
+    vi.textContent = '✕'; vt.textContent = 'Submission Rejected';
+  }
+
+  // eBird count
+  document.getElementById('ebird-count-num').textContent = S.eBirdSightings.length;
+
+  // Map
+  setTimeout(() => initMap(), 150);
+}
+
+// ── LEAFLET MAP ───────────────────────────────────────────
+function initMap() {
+  if (S.map) { S.map.remove(); S.map = null; }
+
+  const lat = S.gps?.lat ?? 34.05;
+  const lng = S.gps?.lng ?? -118.24;
+
+  S.map = L.map('map', { zoomControl: false, attributionControl: false }).setView([lat, lng], 10);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19
+  }).addTo(S.map);
+
+  // User marker
+  const userIcon = L.divIcon({
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:#6db840;border:2px solid #fff;box-shadow:0 0 6px rgba(109,184,64,0.7)"></div>',
+    iconSize: [14, 14], iconAnchor: [7, 7], className: ''
+  });
+
+  if (S.gps) {
+    L.marker([lat, lng], { icon: userIcon })
+      .addTo(S.map)
+      .bindPopup('<b>Your location</b>');
+  }
+
+  // eBird sighting markers
+  const eBirdIcon = L.divIcon({
+    html: '<div style="width:8px;height:8px;border-radius:50%;background:#3db888;opacity:0.75"></div>',
+    iconSize: [8, 8], iconAnchor: [4, 4], className: ''
+  });
+
+  const bounds = S.gps ? [[lat, lng]] : [];
+  S.eBirdSightings.slice(0, 80).forEach(obs => {
+    if (!obs.lat || !obs.lng) return;
+    bounds.push([obs.lat, obs.lng]);
+    L.marker([obs.lat, obs.lng], { icon: eBirdIcon })
+      .addTo(S.map)
+      .bindPopup(`<b>${obs.comName || ''}</b><br>${obs.obsDt || ''}<br>${obs.locName || ''}`);
+  });
+
+  if (bounds.length > 1) {
+    try { S.map.fitBounds(bounds, { padding: [24, 24], maxZoom: 12 }); }
+    catch (e) {}
+  }
+}
+
+// ── NEW SUBMISSION ────────────────────────────────────────
+function newSubmission() {
+  S.gps = null;
+  S.photoB64 = null;
+  S.photoURL = null;
+  S.identification = null;
+  S.eBirdSightings = [];
+  S.trustScore = { gps: 0, ai: 0, ebird: 0, total: 0 };
+  document.getElementById('btn-results').classList.remove('visible');
+  initCamera();
+}
+
+// ── UTILS ─────────────────────────────────────────────────
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
