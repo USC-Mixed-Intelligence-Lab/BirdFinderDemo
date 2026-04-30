@@ -422,8 +422,8 @@ html, body {
 
   <div class="setup-card">
     <div>
-      <div class="setup-label">Claude API Key</div>
-      <input class="setup-input" id="input-claude" type="password" placeholder="sk-ant-...">
+      <div class="setup-label">Gemini API Key</div>
+      <input class="setup-input" id="input-claude" type="password" placeholder="AIza...">
     </div>
     <div class="setup-divider"></div>
     <div>
@@ -432,7 +432,7 @@ html, body {
     </div>
     <div class="setup-hint">
       Keys are used locally in your browser only — never stored or transmitted anywhere except the respective APIs.
-      Get a Claude key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> and an eBird key at <a href="https://ebird.org/api/keygen" target="_blank">ebird.org/api/keygen</a>.
+      Get a free Gemini key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> and an eBird key at <a href="https://ebird.org/api/keygen" target="_blank">ebird.org/api/keygen</a>.
     </div>
   </div>
 
@@ -808,7 +808,7 @@ async function runVerification() {
   btn.classList.add('visible');
 }
 
-// ── CLAUDE API ───────────────────────────────────────────
+// ── GEMINI API ───────────────────────────────────────────
 async function callClaude() {
   const prompt = `You are an expert ornithologist. Identify the bird in this photo.
 
@@ -825,26 +825,22 @@ Respond ONLY with valid JSON, no other text, no markdown fences:
 
 If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCode must be the official eBird species code (e.g. amerob, norcar, blujay, mallar3).`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': S.claudeKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 512,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: S.photoB64 } },
-          { type: 'text', text: prompt }
-        ]
-      }]
-    })
-  });
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${S.claudeKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: 'image/jpeg', data: S.photoB64 } },
+            { text: prompt }
+          ]
+        }],
+        generationConfig: { maxOutputTokens: 512, temperature: 0.1 }
+      })
+    }
+  );
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -852,7 +848,7 @@ If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCod
   }
 
   const data = await res.json();
-  const raw = data.content?.[0]?.text || '{}';
+  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
   const clean = raw.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
