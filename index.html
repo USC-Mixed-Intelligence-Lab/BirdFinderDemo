@@ -811,18 +811,6 @@ async function runVerification() {
 // ── GEMINI API ───────────────────────────────────────────
 async function callGemini() {
   const prompt = `You are an expert ornithologist. Identify the bird in this photo.
-
-Respond ONLY with valid JSON, no other text, no markdown fences:
-{
-  "commonName": "American Robin",
-  "scientificName": "Turdus migratorius",
-  "eBirdCode": "amerob",
-  "confidence": 0.92,
-  "description": "One sentence about the bird.",
-  "fieldMarks": ["orange-red breast", "dark head", "yellow bill"],
-  "cannotDetermine": false
-}
-
 If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCode must be the official eBird species code (e.g. amerob, norcar, blujay, mallar3).`;
 
   const res = await fetch(
@@ -838,9 +826,26 @@ If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCod
           ]
         }],
         generationConfig: { 
-          maxOutputTokens: 512, 
+          maxOutputTokens: 1024, // Increased to prevent the response from getting cut off
           temperature: 0.1,
-          responseMimeType: "application/json" // This forces Gemini to output clean JSON
+          responseMimeType: "application/json",
+          // This strict schema forces Gemini to output perfect JSON
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              commonName: { type: "STRING" },
+              scientificName: { type: "STRING" },
+              eBirdCode: { type: "STRING" },
+              confidence: { type: "NUMBER" },
+              description: { type: "STRING" },
+              fieldMarks: { 
+                type: "ARRAY", 
+                items: { type: "STRING" } 
+              },
+              cannotDetermine: { type: "BOOLEAN" }
+            },
+            required: ["commonName", "scientificName", "eBirdCode", "confidence", "description", "fieldMarks", "cannotDetermine"]
+          }
         }
       })
     }
@@ -855,9 +860,25 @@ If no bird is visible or identifiable, set cannotDetermine to true. The eBirdCod
   }
 
   const data = await res.json();
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-  const clean = raw.replace(/```json|```/g, '').trim();
-  return JSON.parse(clean);
+  
+  // Safety catch: If Gemini flagged the image and returned no content
+  if (!data.candidates || !data.candidates[0].content) {
+      throw new Error("API returned no content. The image may have been flagged by safety filters.");
+  }
+
+  const raw = data.candidates[0].content.parts[0].text || '{}';
+  
+  // Log the raw text to the browser console so we can see exactly what Gemini generated
+  console.log("Raw Gemini Output:", raw);
+
+  try {
+    // Clean up any stray markdown formatting just in case
+    const clean = raw.replace(/```json\n?|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch (parseError) {
+    console.error("Failed to parse this string:", raw);
+    throw new Error("AI returned malformed data. Try capturing again.");
+  }
 }
 
 // ── EBIRD API ────────────────────────────────────────────
